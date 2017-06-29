@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Manager</title>
+</head>
+<body>
+
+	Manager {{user.username}}
+	<br/>
+	<button data-ng-click="createNewBC()">Create new Buyer category</button>
+	<div class="col-md-6">
+    	<div class="header">Kategorije kupaca</div>
+	    <div class="content">
+	        <table class="table">
+	            <tr>
+	                <th class="purple">Sifra</th>
+	                <th class="purple">Naziv</th>
+	                <th style="width: 45px"></th>
+	                <th style="width: 45px"></th>
+	            </tr>
+	            <tr data-ng-repeat="buyerCategory in buyerCategories">
+	                <td class="green">{{buyerCategory.code}}</td>
+	                <td>{{buyerCategory.name}}</td>
+	                <td class="clickable ta-mid" data-ng-click="editBC(buyerCategory)">
+	                    <span class="glyphicon glyphicon-pencil yellow"></span>
+	                </td>
+	                <td class="clickable ta-mid" data-ng-click="deleteBC(buyerCategory)">
+	                    <span class="glyphicon glyphicon-remove yellow"></span>
+	                </td>
+	            </tr>
+	        </table>
+    	</div>
+	</div>
+	<div>
+	Kategorije artikala
+	<br/>
+	<button data-ng-click="createNewPC()">Create new Product category</button>
+		<table class="table">
+			<tr>
+				<th>Sifra</th>
+				<th>Naziv</th>
+				<th>Nadkategorija</th>
+				<th>Max popust</th>
+				<th style="width: 45px"></th>
+	            <th style="width: 45px"></th>
+			</tr>
+			<tr data-ng-repeat="productCategory in productCategories">
+				<td>{{productCategory.code}}</td>
+				<td>{{productCategory.name}}</td>
+				<td>{{productCategory.aboveCategory.code}}</td>
+				<td>{{productCategory.maximumDiscount}}</td>
+				<td class="clickable ta-mid" data-ng-click="editPC(productCategory)">
+                    <span class="glyphicon glyphicon-pencil yellow"></span>
+                </td>
+                <td class="clickable ta-mid" data-ng-click="deletePC(productCategory)">
+                    <span class="glyphicon glyphicon-remove yellow"></span>
+                </td>
+			</tr>
+		</table>
+	</div>
+	<div>
+	Akcijski dogadjaji<br/>
+	<button data-ng-click="createNewAE()">Create new Action event</button>
+	<br/>
+		<table class="table">
+			<tr>
+				<th>Sifra</th>
+				<th>Naziv</th>
+				<th>Datum zavrsetka</th>
+				<th>Popust</th>
+				<th style="width: 45px"></th>
+	            <th style="width: 45px"></th>
+			</tr>
+			<tr data-ng-repeat="actionEvent in actionEvents">
+				<td>{{actionEvent.code}}</td>
+				<td>{{actionEvent.name}}</td>
+				<td>{{actionEvent.endDate}}</td>
+				<td>{{actionEvent.discount}}</td>
+				<td class="clickable ta-mid" data-ng-click="editAE(actionEvent)">
+                    <span class="glyphicon glyphicon-pencil yellow"></span>
+                </td>
+                <td class="clickable ta-mid" data-ng-click="deleteAE(actionEvent)">
+                    <span class="glyphicon glyphicon-remove yellow"></span>
+                </td>
+			</tr>
+		</table>
+	</div>
+	<a data-ui-sref="login" data-ng-click="logOut()">Log Out</a>
+</body>
+</html>

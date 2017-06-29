@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Seller</title>
+</head>
+<body>
+	Seller {{user.username}}
+	<br/>
+	<button data-ng-click="newProduct()">Create new product</button>
+	<div class="col-md-6">
+    	<div class="header">Artikli</div>
+	    <div class="content">
+	        <table class="table">
+	            <tr>
+	                <th class="purple">Sifra</th>
+	                <th class="purple">Naziv</th>
+	                <th> Kategorija </th>
+	                <th>Cijena</th>
+	                <th style="width: 45px"></th>
+	                <th style="width: 45px"></th>
+	                <th style="width: 45px"></th>
+	            </tr>
+	            <tr data-ng-repeat="product in products">
+	                <td class="green">{{product.code}}</td>
+	                <td>{{product.name}}</td>
+	                <td>{{product.category.code}}</td>
+	                <td>{{product.price}}</td>
+	                <td class="clickable ta-mid" data-ng-click="editProduct(product)">
+	                    <span class="glyphicon glyphicon-pencil yellow"></span>
+	                </td>
+	                <td class="clickable ta-mid" data-ng-click="deleteProduct(product)">
+	                    <span class="glyphicon glyphicon-remove yellow"></span>
+	                </td>
+	                <td data-ng-if="product.fillTheStock"
+	                class="clickable ta-mid" data-ng-click="fillTheStocks(product)">
+	                    <span class="glyphicon glyphicon-barcode yellow"></span>
+	                </td>
+	            </tr>
+	        </table>
+    	</div>
+	</div>
+	
+	<br/>
+	<div class="col-md-6">
+    	<div class="header">Racuni</div>
+	    <div class="content">
+	        <table class="table">
+	            <tr>
+	                <th class="purple">Sifra</th>
+	                <th class="purple">Datum</th>
+	                <th> Kupac </th>
+	                <th>Stanje</th>
+	                <th style="width: 45px"></th>
+					<th style="width: 45px"></th>
+	            </tr>
+	            <tr data-ng-repeat="receipt in receipts">
+	                <td class="green">{{receipt.code}}</td>
+	                <td>{{receipt.date}}</td>
+	                <td>{{receipt.buyer.username}}</td>
+	                <td>{{receipt.state}}</td>
+	                <td data-ng-if="receipt.state.includes('ordered')"
+	                class="clickable ta-mid" data-ng-click="removeReceipt(receipt)">
+	                    <span class="glyphicon glyphicon-remove yellow"></span>
+	                </td>
+	                <td data-ng-if="receipt.state.includes('ordered')"
+	                class="clickable ta-mid" data-ng-click="orderReceipt(receipt)">
+	                    <span class="glyphicon glyphicon-ok yellow"></span>
+	                </td>
+	            </tr>
+	        </table>
+    	</div>
+	</div>
+	<a data-ui-sref="login" data-ng-click="logOut()">Log Out</a>
+</body>
+</html>

@@ -1,0 +1,105 @@
+//created on: Apr 1, 2017
+package rules
+
+import application.model.Receipt;
+import application.model.Receipt.ReceiptState;
+import application.model.ReceiptItem;
+import application.model.ReceiptDiscount;
+import application.model.ReceiptItemDiscount;
+import application.model.ReceiptDiscount.DiscountLabel;
+import application.model.Buyer;
+import application.model.ActionEvent;
+import application.model.ProductCategory;
+
+rule "sum price over 20000 give 5%"
+	lock-on-active true
+    when 
+    	$receipt : Receipt( $list : items )
+    	$numb : Number(intValue>200000) from accumulate(
+            ReceiptItem(
+                $q: price
+            ) from $list,
+            sum($q)
+        )
+        
+     then
+     	 modify ($receipt) { 
+            getAppliedDiscounts().add(new ReceiptDiscount($receipt,5,ReceiptDiscount.DiscountLabel.regular));
+        }
+        System.out.println("5 % na ukupnu cijenu "+$numb);
+end
+
+rule "users using system over 2 years"
+	lock-on-active true
+    when 
+    	$receipt : Receipt( (System.currentTimeMillis() - buyer.getRegistrationDate().getTime())
+    	 / (365 * 24 * 60 * 60 * 1000d)  > 2 )
+        
+     then
+     	 modify ($receipt) { 
+            getAppliedDiscounts().add(new ReceiptDiscount($receipt,1,ReceiptDiscount.DiscountLabel.extra));
+        }
+        System.out.println("1% na ukupnu cijenu sstar korisnik ");
+end
+
+
+rule "gold or silver user"
+	lock-on-active true
+    when 
+    	$receipt : Receipt(buyer.buyerCategory.code=="gold" ||buyer.buyerCategory.code=="silver" )
+        
+     then
+     	 modify ($receipt) { 
+            getAppliedDiscounts().add(new ReceiptDiscount($receipt,1,ReceiptDiscount.DiscountLabel.extra));
+        }
+        System.out.println("1% na ukupnu cijenu sija srebro kao zlato ");
+end
+
+
+
+rule "komplikovano pravilo"
+	lock-on-active true
+      when 
+    	$receipt : Receipt( $list : items )
+    	$numb : Number(intValue>50000) from accumulate(
+            ReceiptItem(
+                $q: price
+            ) from $list,
+            sum($q)
+        ) and 
+        $numb1 : Number(intValue>10) from accumulate(
+        	ReceiptItem( price>0.5*$numb ) from $list,
+        	init(int count = 0;),
+            action(count += 1;),
+            reverse(count -= -1;),
+            result(count)
+        )
+        
+     then
+     	 modify ($receipt) { 
+            getAppliedDiscounts().add(new ReceiptDiscount($receipt,3,ReceiptDiscount.DiscountLabel.extra));
+        }
+        System.out.println("onaj teski "+$numb1);
+
+end
+
+
+rule "add all receipt discounts"
+	lock-on-active true
+    when 
+    	$receipt : Receipt( $discs : appliedDiscounts )
+    	$numb : Number() from accumulate(
+            ReceiptDiscount(
+                $q: discount
+            ) from $discs,
+            init(double count = 0;),
+            action(count += $q;),
+            reverse(count -= $q;),
+            result(count)
+        )
+     then
+     	 modify ($receipt) { 
+            setDiscount((double)$numb);
+        }
+        System.out.println("izracunat popust "+$numb);
+end

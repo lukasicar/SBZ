@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Buyer</title>
+</head>
+<body>
+
+	Buyer {{user.username}}
+	<br/>
+	
+	<button data-ng-click='profile()'>Profil</button>
+	<button data-ng-click='history()'>Istorijat racuna</button>
+	<br/>
+	Artikli
+	<table class="table">
+	    <tr>
+	        <th class="purple">Sifra</th>
+	        <th class="purple">Naziv</th>
+	        <th>Kategorija</th>
+	        <th>Cijena</th>
+	        <th style="width: 45px"></th>
+	        <th style="width: 45px"></th>
+	    </tr>
+	    <tr data-ng-repeat="product in products">
+	        <td class="green">{{product.code}}</td>
+	        <td>{{product.name}}</td>
+	        <td>{{product.category.code}}</td>
+	        <td>{{product.price}}</td>
+	        <td><input type=number id='amount' data-ng-model="amount"></td>
+	        <td class="clickable ta-mid" data-ng-click="addToCart(product,amount)">
+	            <span class="glyphicon glyphicon-plus yellow"></span>
+	        </td>
+	    </tr>
+	</table>
+	<br/>
+	Korpa	
+	<table class="table">
+	    <tr>
+	        <th class="purple">Sifra</th>
+	        <th class="purple">naziv</th>
+	        <th>Kategorija</th>
+	        <th>Cijena</th>
+	        <th>Kolicina</th>
+	        <th style="width: 45px"></th>
+	    </tr>
+	    <tr data-ng-repeat="x in korpa.products">
+	        <td class="green">{{x.code}}</td>
+	        <td>{{x.name}}</td>
+	        <td>{{x.category.code}}</td>
+	        <td>{{x.price}}</td>
+	        <td>{{x.kolicina}}</td>
+	        <td class="clickable ta-mid" data-ng-click="removeFromCart(x)">
+	            <span class="glyphicon glyphicon-remove yellow"></span>
+	        </td>
+	    </tr>
+	</table>
+	<button data-ng-click='createBill()'>Kreiraj racun</button><br/><br/>
+	<a data-ui-sref="login" data-ng-click="logOut()">Log Out</a>
+</body>
+</html>

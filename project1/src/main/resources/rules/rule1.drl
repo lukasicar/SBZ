@@ -1,0 +1,54 @@
+//created on: Apr 1, 2017
+package rules
+
+import application.model.Receipt;
+import application.model.Receipt.ReceiptState;
+import application.model.ReceiptItem;
+import application.model.ReceiptDiscount;
+import application.model.ReceiptItemDiscount;
+import application.model.ReceiptDiscount.DiscountLabel;
+
+
+
+rule "Pojedinacni preko 20 artikala nije siroke"
+	lock-on-active true
+    when
+       	$receipt : Receipt($receiptItems : items)
+       	$item : ReceiptItem(amount>20,product.isCategory("siroka potrosnja")==false) from $receiptItems
+    then
+        modify ($item) { 
+            getAppliedDiscounts().add(new ReceiptItemDiscount($receipt,$item,10,ReceiptDiscount.DiscountLabel.regular));
+        }
+        System.out.println("pogodio za 20+  "+$item.getProduct().getCode());
+           
+end
+
+rule "Pojedinacni preko 5 za televizore racunare laptopove"
+	lock-on-active true
+     when
+       	$receipt : Receipt($receiptItems : items)
+       	$item : ReceiptItem(amount>5,product.isCategory("racunar")||
+       	product.isCategory("televizor")||
+       	product.isCategory("laptop")) from $receiptItems
+    then
+        modify ($item) { 
+            getAppliedDiscounts().add(new ReceiptItemDiscount($receipt,$item,5,ReceiptDiscount.DiscountLabel.regular));
+        }
+        System.out.println("pogodio za 5%  "+$item.getProduct().getCode());
+        
+end
+
+rule "preko 5000 i pripada sirokoj"
+	lock-on-active true
+     when
+       	$receipt : Receipt($receiptItems : items)
+       	$item : ReceiptItem(originalSumPrice>5000,
+       	product.isCategory("siroka potrosnja")) 
+       	from $receiptItems
+    then
+        modify ($item) { 
+            getAppliedDiscounts().add(new ReceiptItemDiscount($receipt,$item,7,ReceiptDiscount.DiscountLabel.regular));
+        }
+        System.out.println("pogodio za 5000$  "+$item.getProduct().getCode());
+        
+end

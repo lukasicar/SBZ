@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Profile</title>
+</head>
+<body>
+	
+	<label>Username</label>
+	{{user.username}}
+	<br/>
+	<label>Password</label>
+	{{user.password}}<br/>
+	<label>Datum registracije</label>
+	{{user.registrationDate}}<br/>
+	<label>Adresa</label>
+	{{user.deliveryAddress}}<br/>
+	<label>Nagradni poeni</label>
+	{{user.prizePoints}}<br/>
+	<label>Kategorija kupca</label>
+	{{user.buyerCategory.code}}<br/>
+	
+	<a data-ui-sref="buyer">Home page</a>
+	
+</body>
+</html>

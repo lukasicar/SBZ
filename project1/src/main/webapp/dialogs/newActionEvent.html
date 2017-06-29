@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>New Action Event</title>
+</head>
+<body>
+	<form name="form">
+		<label>Code</label><br/>
+		<input name = "code" id="code" type="text" data-ng-model = "actionEvent.code" class="form-control"  required><br/>  
+	 	<label>Name</label><br/>
+		<input name = "name" type="text" data-ng-model = "actionEvent.name" class="form-control"  required><br/><br/>
+		<input type='number' data-ng-model='actionEvent.discount' class="form-control" placeholder='popust' required/>
+		<br/><label>Pocetak akcijskog dogadjaja</label><br/>
+		<input name="beginDate" type="date" data-ng-model="actionEvent.beginDate" class="form-control" required><br/>
+		<label>Kraj akcijskog dogadjaja</label><br/>
+		<input name="endDate" type="date" data-ng-model="actionEvent.endDate" class="form-control" required><br/>
+		
+	   	<br/><br/>
+	   	Kategorije proizvoda
+	   	<br/> <br/>
+	   	<select id="select" class="form-control" data-ng-model='actionEvent.categories' data-ng-options='x as x.code for x in categories' multiple required>
+	   	</select>
+	   	<br/><br/>
+	   	<button id="button1" data-ng-click="form.$valid && create()">Create</button>
+	   	<button data-ng-click="close()">Close</button>
+	</form>
+</body>
+</html>

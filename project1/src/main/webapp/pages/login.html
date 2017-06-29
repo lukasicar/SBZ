@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Login</title>
+</head>
+<body>
+	<a data-ui-sref="register">Sign up</a>
+	<form  name = "loginForm">
+
+		<label>Username</label><br/>
+		<input name = "username" type="text" data-ng-model = "$parent.user.username" class="form-control"  required><br/>  
+	
+	 	<label>Password</label><br/>
+		<input name = "password" type="password" data-ng-model = "$parent.user.password" class="form-control"  required><br/><br/>
+	
+		<button class="btn btn-default" data-ng-click="loginForm.$valid && submitLogin()">Log In </button>
+		
+	</form>
+	<button class="btn btn-default" data-ng-click="opsa()">Opsa</button>
+</body>
+</html>

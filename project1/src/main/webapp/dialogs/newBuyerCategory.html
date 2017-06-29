@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>BuyerCategory</title>
+</head>
+<body>
+<div>
+	<form  name = "registerForm">
+
+		<label>Code</label><br/>
+		<input name = "code" id="code" type="text" data-ng-model = "buyerCategory.code" class="form-control"  required><br/>  
+	
+	 	<label>Name</label><br/>
+		<input name = "name" type="text" data-ng-model = "buyerCategory.name" class="form-control"  required><br/><br/>
+		
+		<table class='table'>
+	    	<tr>
+	    		<td> <input type='number' data-ng-model='newTreshold.consumptionLow' placeholder='Od' class='form-control'/> </td>
+	    		<td> <input type='number' data-ng-model='newTreshold.consumptionHigh' placeholder='Do' class='form-control'/> </td>	
+	    		<td> <input type='number' data-ng-model='newTreshold.percentage' placeholder='Procenat' class='form-control'/> </td>
+	    		<td> <input type='button' value='+' class='btn btn-primary' data-ng-click="addTreshold()"/> </td>
+	    	 </tr> 
+	    	 <tr> <td colspan='4'> &nbsp </td> </tr>
+	    	  <tr>
+	    	 	<th> Od </th>
+	    	 	<th> Do </th>
+	    	 	<th> Procenat </th>
+	    	 	<th> &nbsp </th>
+	    	 </tr>
+	    	 <tr data-ng-repeat="t in buyerCategory.consumptionTresholds">
+	    	 	<td> {{t.consumptionLow}} </td>
+	    	 	<td> {{t.consumptionHigh}} </td>
+	    	 	<td> {{t.percentage}} </td>
+	    	 	<td> <input type='button' value='-' class="btn btn-primary" data-ng-click="deleteTreshold(t)"/> </td>
+	    	 </tr>
+	    </table>
+		<button id="button1" class="btn btn-default" data-ng-click="registerForm.$valid && create()">Create</button>
+		<button class="btn btn-default" data-ng-click="close()">Cancel </button>
+	</form>
+</div>
+</body>
+</html>

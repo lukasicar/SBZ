@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>New Product</title>
+</head>
+<body>
+	<form name="form">
+		<label>Code</label><br/>
+		<input name = "code" id="code" type="text" data-ng-model = "product.code" class="form-control"  required><br/>  
+	 	<label>Name</label><br/>
+		<input name = "name" type="text" data-ng-model = "product.name" class="form-control"  required><br/><br/>
+		<input type='number' data-ng-model='product.price' class="form-control" placeholder='Cijena' required/>
+	   	<br/><br/>
+	   	Kategorija
+	   	<br/> <br/>
+	   	<select class="form-control" data-ng-model='product.category' data-ng-options='x as x.code for x in categories' required></select>
+	   	<br/><br/>
+	   	Na Lageru
+	   	<input type='number' data-ng-model='product.inStock' class="form-control" placeholder='Na Lageru' required/>
+	   	<br/><br/>
+	   	Datum kreiranja podataka
+	   	<input type='date' data-ng-model='product.recordCreationDate' class="form-control" required/>
+	   	<br/><br/>
+	   	Minimum za lager
+	   	<input type='number' data-ng-model='product.minimumInStock' class="form-control" placeholder='minimum za lager' required/>
+	   	<br/><br/>
+	   	Status
+	   	<br/> <br/>
+	   	<select class="form-control" data-ng-model='product.status' required>
+	   		<option>Archived</option>
+	   		<option>Active</option>
+	   	</select>
+	   	<br/><br/>
+
+	   	<button id="button1" data-ng-click="create()">Create</button>
+	   	<button data-ng-click="close()">Close</button>
+	</form>
+</body>
+</html>

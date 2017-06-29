@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>New ProductCategory</title>
+</head>
+<body>
+	<form name="form">
+		<label>Code</label><br/>
+		<input name = "code" id="code" type="text" data-ng-model = "productCategory.code" class="form-control"  required><br/>  
+	
+	 	<label>Name</label><br/>
+		<input name = "name" type="text" data-ng-model = "productCategory.name" class="form-control"  required><br/><br/>
+		<input type='number' data-ng-model='productCategory.maximumDiscount' class="form-control" placeholder='Maksimalan popust' required/>
+	   	<br/><br/>
+	   	Nadkategorija:
+	   	<br/> <br/>
+	   	<select class="form-control" data-ng-model='productCategory.aboveCategory'>
+	   		<option data-ng-repeat="cat in categories" value='{{cat}}'>
+	   			{{cat.code}} - {{cat.name}}
+	   		</option>
+	   	</select>
+	   	<br/><br/>
+	   	<button id="button1" data-ng-click="form.$valid && create()">Create</button>
+	   	<button data-ng-click="close()">Close</button>
+	</form>
+</body>
+</html>

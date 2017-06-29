@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>History</title>
+</head>
+<body>
+	Istorijat racuna
+	<table class="table">
+	    <tr>
+	        <th class="purple">Sifra</th>
+	        <th class="purple">naziv</th>
+	        <th>Kategorija</th>
+	        <th>Cijena</th>
+	        <th style="width: 45px"></th>
+	        <th style="width: 45px"></th>
+	    </tr>
+	    <tr data-ng-repeat="product in products">
+	        <td class="green">{{product.code}}</td>
+	        <td>{{product.name}}</td>
+	        <td>{{product.category.code}}</td>
+	        <td>{{product.price}}</td>
+	        
+	    </tr>
+	</table>
+	
+	
+	<a data-ui-sref="buyer">Home page</a>
+</body>
+</html>

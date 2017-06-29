@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>ConfirmReceipt</title>
+</head>
+<body>
+
+	<label>Pocetna cijena</label>
+	{{receipt.originalPrice}}<br/>
+	<label>Popust</label>
+	{{receipt.discount}}<br/>
+	<label>Prava cijena</label>
+	{{receipt.finalPrice}}<br/>
+	<label>Broj postignutih poena</label>
+	{{receipt.numberOfGainedPoints}}<br/>
+	<input type="number" name="number" data-ng-model="receipt.numberOfSpentPoints">Broj POENA ZA POtrositi<br/>
+	
+	<button data-ng-click="create()">Kupi</button>
+	<button data-ng-click="close()">Close</button>
+
+</body>
+</html>

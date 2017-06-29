@@ -1,0 +1,33 @@
+//created on: Apr 1, 2017
+package rules
+
+import application.model.Receipt;
+import application.model.Receipt.ReceiptState;
+import application.model.ReceiptItem;
+import application.model.ReceiptDiscount;
+import application.model.ReceiptItemDiscount;
+import application.model.ReceiptDiscount.DiscountLabel;
+import application.model.Buyer;
+import application.model.ActionEvent;
+
+
+rule "add all singular discounts"
+	lock-on-active true
+    when 
+    	$receiptItem : ReceiptItem( $discs : appliedDiscounts )
+    	$numb : Number() from accumulate(
+            ReceiptItemDiscount(
+                label == ReceiptDiscount.DiscountLabel.extra, 
+                $q: discount
+            ) from $discs,
+            init(double count = $receiptItem.resolveBiggestDiscount();),
+            action(count += $q;),
+            reverse(count -= $q;),
+            result(count)
+        )
+     then
+     	 modify ($receiptItem) { 
+            setDiscount((double)$numb);
+        }
+        System.out.println("izracunat popust "+$numb);
+end
