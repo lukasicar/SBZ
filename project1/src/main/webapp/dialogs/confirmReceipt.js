@@ -12,7 +12,9 @@ app.controller('confirmReceipt', ['$rootScope','$scope', '$location','$http','$s
 		}
 		
 		$scope.create=function(receipt){
-			if($scope.receipt.buyer.prizePoints<$scope.receipt.numberOfSpentPoints){
+			/*alert($scope.receipt.buyer);
+			return;*/
+			if($scope.user.prizePoints<$scope.receipt.numberOfSpentPoints){
 				alert(" nemate toliko poena free");
 				return;
 			}

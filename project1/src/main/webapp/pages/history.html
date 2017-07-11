@@ -6,23 +6,24 @@
 </head>
 <body>
 	Istorijat racuna
-	<table class="table">
-	    <tr>
-	        <th class="purple">Sifra</th>
-	        <th class="purple">naziv</th>
-	        <th>Kategorija</th>
-	        <th>Cijena</th>
-	        <th style="width: 45px"></th>
-	        <th style="width: 45px"></th>
-	    </tr>
-	    <tr data-ng-repeat="product in products">
-	        <td class="green">{{product.code}}</td>
-	        <td>{{product.name}}</td>
-	        <td>{{product.category.code}}</td>
-	        <td>{{product.price}}</td>
-	        
-	    </tr>
-	</table>
+	 <div class="content">
+	        <table class="table">
+	            <tr>
+	                <th class="purple">Sifra</th>
+	                <th class="purple">Datum</th>
+	                <th> Kupac </th>
+	                <th>Stanje</th>
+	                
+	            </tr>
+	            <tr data-ng-repeat="receipt in receipts">
+	                <td class="green">{{receipt.code}}</td>
+	                <td>{{receipt.date}}</td>
+	                <td>{{receipt.buyer.username}}</td>
+	                <td>{{receipt.state}}</td>
+	                
+	            </tr>
+	        </table>
+    	</div>
 	
 	
 	<a data-ui-sref="buyer">Home page</a>

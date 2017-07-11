@@ -29,6 +29,10 @@ services.service('buyerService', ['$http', function($http){
 		return $http.get("/buyer/receipts");
 	}
 	
+	this.getMyReceipts=function(){
+		return $http.get("/buyer/receiptsMy");
+	}
+	
 	this.removeR=function(receipt){
 		return $http.post("/buyer/removeR",receipt);
 	}

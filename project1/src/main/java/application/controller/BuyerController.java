@@ -64,21 +64,30 @@ public class BuyerController {
 	}
 	
 	
-	@SuppressWarnings("rawtypes")
 	@RequestMapping(method = RequestMethod.POST,value = "/createBill")
 	public Receipt createBill(@RequestBody Receipt receipt){
 		
+		
 		Random r=new Random();
+		
+		
+		ServletRequestAttributes attr = (ServletRequestAttributes) 
+				RequestContextHolder.currentRequestAttributes();
+		HttpSession session= attr.getRequest().getSession(true);
+		User user = (User) session.getAttribute("user");
+		Buyer buyer=buyerDAO.findByUsername(user.getUsername());
+		
+		receipt.setBuyer(buyer);
+		
 		receipt.setCode(String.valueOf(r.nextInt(21341)));
 		receipt.setState(ReceiptState.ordered);
-		System.out.println("STA STA");
+		System.out.println(receipt.getItems().isEmpty());
+		double sum=0;
 		for(ReceiptItem ritem : receipt.getItems()){
 			ritem.setReceipt(receipt);
-			System.out.println(ritem.getAmount());
-			System.out.println(ritem.getOriginalSumPrice());
+			sum+=ritem.getOriginalSumPrice();
 		}
-
-		System.out.println(receipt.getDate());
+		receipt.setOriginalPrice(sum);
 		
 		System.out.println( "Bootstrapping the Rule Engine ..." );
         // Bootstrapping a Rule Engine Session
@@ -100,17 +109,7 @@ public class BuyerController {
 		
 		System.out.println("zavrsila pravila");
 		
-		double sum=0;
-		for(ReceiptItem ritem : receipt.getItems()){
-			System.out.println(ritem.getAmount());
-			System.out.println(ritem.getOriginalSumPrice());
-			sum+=ritem.getPrice();
-		}
-		receipt.setFinalPrice(sum*((100-receipt.getDiscount())/100));
 		
-		System.out.println(receipt.getOriginalPrice());
-		System.out.println(receipt.getDiscount());
-		System.out.println(receipt.getFinalPrice());
 		return receipt;
 	}
 	
@@ -119,19 +118,29 @@ public class BuyerController {
 	public ResponseEntity buy(@RequestBody Receipt receipt){
 		
 		
-		receipt.setState(ReceiptState.realized);
+		Receipt r=receiptDAO.findById(receipt.getId());
+		
+		r.setState(ReceiptState.realized);
+		
 		
 		for(ReceiptItem ritem : receipt.getItems()){
 			Product p=productDAO.findByCode(ritem.getProduct().getCode());
+			if(p.getInStock()-ritem.getAmount()<0){
+				return new ResponseEntity<>(receipt,HttpStatus.ACCEPTED);
+			}
 			p.setInStock(p.getInStock()-ritem.getAmount());
 			productDAO.save(p);
 		}
 		
-		receiptDAO.save(receipt);
+		receiptDAO.save(r);
+		
+		r=receiptDAO.findById(receipt.getId());
+	
 		Buyer b=buyerDAO.findByUsername(receipt.getBuyer().getUsername());
-		b.getShoppingHistory().add(receipt);
+		b.getShoppingHistory().add(r);
 		b.setPrizePoints(b.getPrizePoints()-receipt.getNumberOfSpentPoints()
 				+receipt.getNumberOfGainedPoints());
+		
 		buyerDAO.save(b);
 		return new ResponseEntity<>(receipt,HttpStatus.OK);
 	}
@@ -148,6 +157,16 @@ public class BuyerController {
         KieSession kSession =  kContainer.newKieSession("ksession-rules1");
         
 		kSession.insert(receipt);
+		//System.out.println(receipt.getBuyer());
+		
+		/*
+		ServletRequestAttributes attr = (ServletRequestAttributes) 
+				RequestContextHolder.currentRequestAttributes();
+		HttpSession session= attr.getRequest().getSession(true);
+		User user = (User) session.getAttribute("user");
+		Buyer buyer=buyerDAO.findByUsername(user.getUsername());
+		kSession.insert(buyer);*/
+		
 		kSession.insert(receipt.getBuyer());
 		
 		System.out.println("krecu pravila");
@@ -156,7 +175,7 @@ public class BuyerController {
 		System.out.println("zavrsila pravila");
 		
 		receiptDAO.save(receipt);
-		
+	
 		return new ResponseEntity<>(receipt,HttpStatus.OK);
 	}
 	
@@ -164,6 +183,17 @@ public class BuyerController {
 	@RequestMapping(method=RequestMethod.GET,value="receipts")
 	public ResponseEntity getReceipts(){
 		return new ResponseEntity<>(receiptDAO.findAllByOrderByCodeAsc(),HttpStatus.OK);
+	}
+	
+	@SuppressWarnings("rawtypes")
+	@RequestMapping(method=RequestMethod.GET,value="receiptsMy")
+	public ResponseEntity getReceiptsMy(){
+		ServletRequestAttributes attr = (ServletRequestAttributes) 
+				RequestContextHolder.currentRequestAttributes();
+		HttpSession session= attr.getRequest().getSession(true);
+		User user = (User) session.getAttribute("user");
+		Buyer buyer=buyerDAO.findByUsername(user.getUsername());
+		return new ResponseEntity<>(buyer.getShoppingHistory(),HttpStatus.OK);
 	}
 	
 	@SuppressWarnings("rawtypes")

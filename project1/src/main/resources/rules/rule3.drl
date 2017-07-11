@@ -13,14 +13,38 @@ import application.model.ActionEvent;
 
 rule "add all singular discounts"
 	lock-on-active true
+	salience 7.1
     when 
-    	$receiptItem : ReceiptItem( $discs : appliedDiscounts )
+    	
+    	$receiptItem : ReceiptItem($discs : appliedDiscounts)
+    	$numb1 : Number() from accumulate(
+            ReceiptItemDiscount(
+                label == ReceiptDiscount.DiscountLabel.regular, 
+                $q: discount
+            ) from $discs,
+	        init(double mmax=0),
+            action(if($q>mmax)
+            mmax=$q;),
+            result(mmax)
+        )
+     then
+     	 modify ($receiptItem) { 
+            setDiscount((double)$numb1);
+        }
+        System.out.println("izracunat popust singular osnovni"+$numb1);
+end
+
+rule "add all singular discounts 2"
+	lock-on-active true
+	salience 7.0
+    when 
+    	$receiptItem : ReceiptItem( $discs : appliedDiscounts)
     	$numb : Number() from accumulate(
             ReceiptItemDiscount(
                 label == ReceiptDiscount.DiscountLabel.extra, 
                 $q: discount
             ) from $discs,
-            init(double count = $receiptItem.resolveBiggestDiscount();),
+            init(double count = $receiptItem.getDiscount()),
             action(count += $q;),
             reverse(count -= $q;),
             result(count)
@@ -29,5 +53,18 @@ rule "add all singular discounts"
      	 modify ($receiptItem) { 
             setDiscount((double)$numb);
         }
-        System.out.println("izracunat popust "+$numb);
+        System.out.println("izracunat popust singular sa extra"+$numb);
+end
+
+
+rule "ako je vece od max popusta"
+	lock-on-active true
+	salience 6.9
+    when 
+    	$receiptItem : ReceiptItem( getProduct().getCategory().getMaximumDiscount()<discount)
+     then
+     	 modify ($receiptItem) { 
+            setDiscount($receiptItem.getProduct().getCategory().getMaximumDiscount());
+        }
+        System.out.println("ipak cemo uzeti maximum discount"+$receiptItem.getProduct().getCategory().getMaximumDiscount());
 end

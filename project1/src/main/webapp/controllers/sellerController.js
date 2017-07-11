@@ -115,7 +115,11 @@ app.controller('sellerController', ['$rootScope','$scope', '$location','$http','
 	    
 	    $scope.orderReceipt = function (product) {
 	        buyerService.buy(product).then(
-	        		function(){
+	        		function(response){
+	        			if(response.status==202){
+	        				alert("nema dovoljno na lageru kolicine");
+	        				return;
+	        			}
 	        			buyerService.getReceipts().then(
 	        					function (response) {
 	        						$scope.receipts=[];

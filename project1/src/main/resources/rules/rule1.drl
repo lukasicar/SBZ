@@ -12,6 +12,7 @@ import application.model.ReceiptDiscount.DiscountLabel;
 
 rule "Pojedinacni preko 20 artikala nije siroke"
 	lock-on-active true
+	salience 10
     when
        	$receipt : Receipt($receiptItems : items)
        	$item : ReceiptItem(amount>20,product.isCategory("siroka potrosnja")==false) from $receiptItems
@@ -25,6 +26,7 @@ end
 
 rule "Pojedinacni preko 5 za televizore racunare laptopove"
 	lock-on-active true
+	salience 10
      when
        	$receipt : Receipt($receiptItems : items)
        	$item : ReceiptItem(amount>5,product.isCategory("racunar")||
@@ -40,6 +42,7 @@ end
 
 rule "preko 5000 i pripada sirokoj"
 	lock-on-active true
+	salience 10
      when
        	$receipt : Receipt($receiptItems : items)
        	$item : ReceiptItem(originalSumPrice>5000,

@@ -32,7 +32,14 @@ app.controller('historyController', ['$rootScope','$scope', '$location','$http',
 			
 			
 		}
-		
-	    
+		$scope.receipts=[];
+		buyerService.getMyReceipts().then(
+				function (response) {
+					$scope.receipts=[];
+					for(var x in response.data){
+						response.data[x].date=new Date(response.data[x].date);
+						$scope.receipts.push(response.data[x]);
+					}
+				});
 	   
 }]);

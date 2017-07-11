@@ -14,9 +14,11 @@ import application.model.ProductCategory;
 
 rule "2% ako je kupovan u zadnjih 15 dana"
 	lock-on-active true
+	salience 9
     when
-       	$receipt : Receipt($receiptItems : items)
-       	$item : ReceiptItem(this.iisBuyedinLast15Days()==true) from $receiptItems
+       	$receipt : Receipt($receiptItems : items)   
+    	$item : ReceiptItem(this.iisBuyedinLast15Days()==true) from $receiptItems
+       	
     then
         modify ($item) { 
             getAppliedDiscounts().add(new ReceiptItemDiscount($receipt,$item,2,ReceiptDiscount.DiscountLabel.extra));
@@ -27,6 +29,7 @@ end
 
 rule "1% ako je kupovana kategorija u zadnjih 30 dana"
 	lock-on-active true
+	salience 9
     when
        	$receipt : Receipt($receiptItems : items)
        	$item : ReceiptItem(this.iisBuyedinLast30Days()==true) from $receiptItems
@@ -40,6 +43,7 @@ end
 
 rule "pripada akcijskoj ponudi"
 	lock-on-active true
+	salience 8
     when
        	$receipt : Receipt($receiptItems : items,$date:date)
        	$actionEvent : ActionEvent( beginDate <= $date && endDate >= $date,$cats : categories)

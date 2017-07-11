@@ -9,6 +9,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import application.model.ReceiptDiscount.DiscountLabel;
 @Entity
 public class ReceiptItemDiscount implements Serializable{

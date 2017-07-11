@@ -13,13 +13,15 @@ import application.model.Product;
 import application.model.ConsumptionTreshold;
 
 rule "prize points"
+	lock-on-active true
 	when
 		$receipt : Receipt($list : buyer.buyerCategory.consumptionTresholds)
+		//$buyer : Buyer($list : buyerCategory.consumptionTresholds)
 		$tresh : ConsumptionTreshold(consumptionLow<$receipt.finalPrice &&
 		consumptionHigh>$receipt.finalPrice) from $list
 	then
 		modify ($receipt) { 
-            setNumberOfGainedPoints((int)$receipt.getFinalPrice()*(int)$tresh.getPercentage());
+            setNumberOfGainedPoints((int)$receipt.getFinalPrice()*(int)$tresh.getPercentage()/100);
         }
         System.out.println("dobio dodatne poene  ");       
 end

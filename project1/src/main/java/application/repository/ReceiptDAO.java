@@ -10,4 +10,5 @@ public interface ReceiptDAO extends JpaRepository<Receipt, Integer>{
 
 	List<Receipt> findAllByOrderByCodeAsc();
 	
+	Receipt findById(Integer id);
 }

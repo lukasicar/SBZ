@@ -13,7 +13,9 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 public class Receipt {
@@ -45,7 +47,8 @@ public class Receipt {
 	@JsonIgnore
 	private List<ReceiptDiscount> appliedDiscounts=new ArrayList<>();
 	@OneToMany(cascade = CascadeType.ALL,mappedBy="receipt")
-	@JsonIgnore
+	//@JsonIgnore
+	@JsonManagedReference
 	private List<ReceiptItem> items=new ArrayList<>();
 	
 	public int getId() {

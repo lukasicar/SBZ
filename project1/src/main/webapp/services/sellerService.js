@@ -28,6 +28,6 @@ services.service('sellerService', ['$http', function($http){
 	}
 	
 	this.fillTheStocks=function(product){
-		return $http.post("/product/fillTheStocks",product);
+		return $http.put("/product/fillTheStocks",product);
 	}
 }]);

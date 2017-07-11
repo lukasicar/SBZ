@@ -13,6 +13,8 @@
 	<button data-ng-click='history()'>Istorijat racuna</button>
 	<br/>
 	Artikli
+	<p>Type a letter in the input field:</p>
+	<p><input type="text" data-ng-model="test"></p>
 	<table class="table">
 	    <tr>
 	        <th class="purple">Sifra</th>
@@ -22,7 +24,7 @@
 	        <th style="width: 45px"></th>
 	        <th style="width: 45px"></th>
 	    </tr>
-	    <tr data-ng-repeat="product in products">
+	    <tr data-ng-repeat="product in products | filter:test">
 	        <td class="green">{{product.code}}</td>
 	        <td>{{product.name}}</td>
 	        <td>{{product.category.code}}</td>

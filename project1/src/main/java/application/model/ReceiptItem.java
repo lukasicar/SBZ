@@ -14,7 +14,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import application.model.ReceiptDiscount.DiscountLabel;
 @Entity
@@ -30,7 +32,8 @@ public class ReceiptItem implements Serializable{
 	private int id;
 	//@Column(unique=true)
 	@ManyToOne
-	//@JsonBackReference
+	@JsonBackReference
+	//@JsonIgnore
 	private Receipt receipt;
 	private int ordinalNumber;
 	@OneToOne
@@ -39,8 +42,10 @@ public class ReceiptItem implements Serializable{
 	private int amount;
 	private double originalSumPrice;
 	private double discount;
+	private double finalPrice;
 	@OneToMany(cascade = CascadeType.ALL,mappedBy="receiptItem")
 	@JsonIgnore
+	//@JsonManagedReference
 	private List<ReceiptItemDiscount> appliedDiscounts=new ArrayList<>();
 	
 	
@@ -70,7 +75,7 @@ public class ReceiptItem implements Serializable{
 		this.product = product;
 	}
 	public double getPrice() {
-		return amount*originalSumPrice * ((100-discount)/100);
+		return price;
 	}
 	public void setPrice(double price) {
 		this.price = price;
@@ -103,30 +108,32 @@ public class ReceiptItem implements Serializable{
 		this.appliedDiscounts = appliedDiscounts;
 	}
 	
-	public double resolveBiggestDiscount(){
+	/*public double resolveBiggestDiscount(){
 		if(getIndexOfFirstRegularDiscount()==-1){
 			return 0;
 		}
 		double biggest=getIndexOfFirstRegularDiscount();
 		for(ReceiptItemDiscount rit:appliedDiscounts){
+			System.out.println(rit.getDiscount());
 			if(rit.getDiscount()>biggest && rit.getLabel().equals(DiscountLabel.regular))
 				biggest=rit.getDiscount();
 		}
+		System.out.println(biggest);
 		return biggest;
 	}
 	
 	public int getIndexOfFirstRegularDiscount(){
 		for(ReceiptItemDiscount rid : appliedDiscounts){
+			System.out.println("eeej "+rid.getDiscount()+rid.getLabel());
 			if(rid.getLabel().equals(DiscountLabel.regular)){
 				return appliedDiscounts.indexOf(rid);
 			}
 		}
 		return -1;
-	}
+	}*/
 	
 	public boolean iisBuyedinLast15Days(){
 		Date now=new Date();
-		System.out.println(now);
 		for(Receipt rec : receipt.getBuyer().getShoppingHistory()){
 			for(ReceiptItem ritem : rec.getItems()){
 				if(ritem.getProduct().getCode().equals(product.getCode())){
@@ -150,5 +157,11 @@ public class ReceiptItem implements Serializable{
 			}
 		}
 		return false;
+	}
+	public double getFinalPrice() {
+		return originalSumPrice*(100-discount)/100;
+	}
+	public void setFinalPrice(double finalPrice) {
+		this.finalPrice = finalPrice;
 	}
 }

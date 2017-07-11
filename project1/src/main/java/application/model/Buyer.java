@@ -9,7 +9,9 @@ import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 public class Buyer extends User implements Serializable{
@@ -40,7 +42,7 @@ public class Buyer extends User implements Serializable{
 	private int prizePoints;
 	@OneToOne
 	private BuyerCategory buyerCategory;
-	@OneToMany(cascade = CascadeType.ALL,mappedBy="buyer")
+	@OneToMany(mappedBy="buyer")
 	//@JsonManagedReference
 	//@JsonBackReference
 	@JsonIgnore

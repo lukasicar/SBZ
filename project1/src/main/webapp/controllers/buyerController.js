@@ -45,6 +45,7 @@ app.controller('buyerController', ['$rootScope','$scope', '$location','$http','$
 			buyerService.getMyBuyer().then(
 					function(response) {
 						$scope.user=response.data;
+						alert($scope.user.prizePoints);
 					});
 			
 			
@@ -59,6 +60,10 @@ app.controller('buyerController', ['$rootScope','$scope', '$location','$http','$
 		
 		$scope.addToCart=function(product,amount){
 			$scope.korpa=JSON.parse(sessionStorage.korpa);
+			if(amount==undefined){
+				alert("nema nula");
+				return;
+			}
 			if(product.inStock<amount){
 				alert("nema toliko na lageru");
 				return;
@@ -97,14 +102,18 @@ app.controller('buyerController', ['$rootScope','$scope', '$location','$http','$
 				alert("prazna korpa ili nema toliko resursa");
 				return;
 			}
+			
 			var object=new Object();
-			object.date=new Date();
-			object.buyer=$scope.user;
+			object.date=Date.now();
+			//object.buyer=$scope.user;
+			//alert($scope.user.shoppingHistory);
 			object.items=items;
+			
 			buyerService.createBill(object).then(function(response){
 				var scope = $scope.$new(true);
 		        scope.buyerService = buyerService;
 		        scope.receipt=response.data;
+		        scope.user=$scope.user;
 		        $uibModal.open({
 		            animation: true,
 		            templateUrl: 'dialogs/confirmReceipt.html',
